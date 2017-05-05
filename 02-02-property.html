@@ -14,20 +14,27 @@
     <script src="react/build/react.js"></script>
     <script src="react/build/react-dom.js"></script>
     <script>
+      // render内のthis.propsでcreateElement時に渡したプロパティを取得できる。
+      //
+      var Component = React.createClass({
+        render: function() {
+          this.props.name=1;
+          return React.DOM.span(null, '私は' + this.props.name + 'です。');
+        }
+      });
       // アプリケーションコード
-      // React.DOM.h1の第1引数は コンポーネントに渡したいプロパティ
+      // createElementで作成したComponentオブジェクトを渡す
       ReactDOM.render(
-        React.DOM.h1({
-          id: 'my-heading'
-        }, "hello, world!"),
+        React.createElement(Component, {
+          name: 'bob'
+        }),
         document.getElementById("app")
       );
+
       ReactDOM.render(
-        React.DOM.h1(
-          null,
-          React.DOM.span(null, "hello"),
-          " world!"
-        ),
+        React.createElement(Component, {
+          name: 'jobs'
+        }),
         document.getElementById("app2")
       );
     </script>

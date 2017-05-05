@@ -14,20 +14,25 @@
     <script src="react/build/react.js"></script>
     <script src="react/build/react-dom.js"></script>
     <script>
+      // React.createClassでコンポーネントインスタンスを作成する。
+      // 引数に渡すオブジェクトはrenderが必須
+      var Component = React.createClass({
+        render: function() {
+          return React.DOM.span(null, 'custom component');
+        }
+      });
+
+      var ComponentFactory = React.createFactory(Component);
+
       // アプリケーションコード
-      // React.DOM.h1の第1引数は コンポーネントに渡したいプロパティ
+      // createElementで作成したComponentオブジェクトを渡す
       ReactDOM.render(
-        React.DOM.h1({
-          id: 'my-heading'
-        }, "hello, world!"),
+        React.createElement(Component),
         document.getElementById("app")
       );
+
       ReactDOM.render(
-        React.DOM.h1(
-          null,
-          React.DOM.span(null, "hello"),
-          " world!"
-        ),
+        ComponentFactory(),
         document.getElementById("app2")
       );
     </script>
