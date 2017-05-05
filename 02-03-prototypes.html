@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ここに描画-->
+    </div>
+    <div id="app2">
+      <!-- ここに描画-->
+    </div>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script>
+      // コンポーネントにpropTypesというプロパティを追加すると、コンポーネントが受け付けるプロパティの名前や型を宣言できる。
+
+      var Component = React.createClass({
+        propTypes: {
+          name: React.PropTypes.string.isRequired
+        },
+        render: function() {
+          this.props.name=1;
+          return React.DOM.span(null, '私は' + this.props.name + 'です。');
+        }
+      });
+      // アプリケーションコード
+      // createElementで作成したComponentオブジェクトを渡す
+      ReactDOM.render(
+        React.createElement(Component, {
+          name: 'bob'
+        }),
+        document.getElementById("app")
+      );
+
+      // nameが設定されていないのでブラウザコンソール上でエラーが出る
+      ReactDOM.render(
+        React.createElement(Component, {
+        }),
+        document.getElementById("app2")
+      );
+    </script>
+  </body>
+</html>

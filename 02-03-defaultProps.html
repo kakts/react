@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ここに描画-->
+    </div>
+    <div id="app2">
+      <!-- ここに描画-->
+    </div>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script>
+
+      // getDefaultPropsで、デフォルト値を指定できる
+      var Component = React.createClass({
+        propTypes: {
+          firstName: React.PropTypes.string.isRequired,
+          middleName: React.PropTypes.string,
+          familyName: React.PropTypes.string.isRequired,
+          address: React.PropTypes.string
+        },
+
+        getDefaultProps: function() {
+          return {
+            middleName: 'default',
+            address: 'nothing'
+          };
+        },
+
+        render: function() {
+          this.props.name=1;
+          return React.DOM.span(null, 'firstName:' + this.props.firstName + '\n' +
+            'middleName: ' + this.props.middleName + '\n' +
+            'familyName: ' + this.props.familyName + '\n' +
+            'address: ' + this.props.address);
+        }
+      });
+      // アプリケーションコード
+      // createElementで作成したComponentオブジェクトを渡す
+      ReactDOM.render(
+        React.createElement(Component, {
+          firstName: 'first1',
+          middleName: 'middle1',
+          familyName: 'family1',
+          address: 'tokyo'
+        }),
+        document.getElementById("app")
+      );
+
+      // nameが設定されていないのでブラウザコンソール上でエラーが出る
+      ReactDOM.render(
+        React.createElement(Component, {
+          firstName: 'first1',
+          familyName: 'family1'
+        }),
+        document.getElementById("app2")
+      );
+    </script>
+  </body>
+</html>
