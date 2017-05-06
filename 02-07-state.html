@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ここに描画-->
+    </div>
+    <div id="app2">
+      <!-- ここに描画-->
+    </div>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script>
+      // テキストエリア 文字数表示用コンポーネント
+      // 文字列を変更した場合 onChangeに設定したイベント関数が実行される。
+      // onChange時にsetStateでvalueの値を変えている。
+      // 変更と同時に文字数も変わる
+      var TextAreaCounter = React.createClass({
+        propTypes: {
+          text: React.PropTypes.string
+        },
+        getDefaultProps: function() {
+          return {
+            text: ''
+          };
+        },
+        render: function() {
+          return React.DOM.div(null,
+            React.DOM.textarea({
+              value: this.state.text,
+              onChange: this._textChange
+            }),
+            React.DOM.h3(null, this.state.text.length)
+          );
+        },
+        getInitialState: function() {
+          return {
+            text: this.props.text
+          }
+        },
+        _textChange: function(ev) {
+          this.setState({
+            text: ev.target.value
+          })
+        }
+      });
+      // アプリケーションコード
+      // createElementで作成したComponentオブジェクトを渡す
+      ReactDOM.render(
+        React.createElement(TextAreaCounter, {
+          text: 'bob'
+        }),
+        document.getElementById("app")
+      );
+
+      // nameが設定されていないのでブラウザコンソール上でエラーが出る
+      ReactDOM.render(
+        React.createElement(TextAreaCounter, {
+          text: 'joe'
+        }),
+        document.getElementById("app2")
+      );
+    </script>
+  </body>
+</html>
