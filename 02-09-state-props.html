@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ここに描画-->
+    </div>
+    <div id="app2">
+      <!-- ここに描画-->
+    </div>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script>
+      // テキストエリア 文字数表示用コンポーネント
+      // 外部からのプロパティ変更に対応させるため、componentWillReceiveメソッドを追加する
+      var TextAreaCounter = React.createClass({
+        propTypes: {
+          text: React.PropTypes.string
+        },
+        getDefaultProps: function() {
+          return {
+            text: ''
+          };
+        },
+
+        getInitialState: function() {
+          return {
+            text: this.props.defaultValue
+          }
+        },
+        _textChange: function(ev) {
+          this.setState({
+            text: ev.target.value
+          })
+        },
+        componentWillReceiveProps: function(newProps) {
+          this.setState({
+            text: newProps.defaultValue
+          });
+        },
+        render: function() {
+          return React.DOM.div(null,
+            React.DOM.textarea({
+              value: this.state.text,
+              onChange: this._textChange
+            }),
+            React.DOM.h3(null, this.state.text.length)
+          );
+        },
+      });
+
+      var myTextAreaCounter = ReactDOM.render(
+        React.createElement(TextAreaCounter, {
+          defaultValue: 'ボブ'
+        }),
+        document.getElementById("app")
+      );
+      // アプリケーションコード
+      // createElementで作成したComponentオブジェクトを渡す
+      ReactDOM.render(
+        React.createElement(TextAreaCounter, {
+          defaultValue: 'bob'
+        }),
+        document.getElementById("app")
+      );
+
+      // // nameが設定されていないのでブラウザコンソール上でエラーが出る
+      // ReactDOM.render(
+      //   React.createElement(TextAreaCounter, {
+      //     text: 'joe'
+      //   }),
+      //   document.getElementById("app2")
+      // );
+    </script>
+  </body>
+</html>
