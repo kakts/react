@@ -14,9 +14,42 @@
     <script src="react/build/react.js"></script>
     <script src="react/build/react-dom.js"></script>
     <script>
+      var logMixin = {
+        _log: function(methodName, args) {
+          console.log(this.name + '::' + methodName, args);
+        },
+        componentWillUpdate: function() {
+          // update直前
+          this._log('componentWillUpdate', arguments);
+        },
+        componentDidUpdate: function(oldProps, oldState) {
+          // update直後
+          this._log('componentDidUpdate', arguments);
+        },
+        componentWillMount: function() {
+          this._log('componentWillMount', arguments);
+        },
+        componentDidMount: function() {
+          this._log('componentDidMount', arguments);
+        }
+      };
+
+      var Counter = React.createClass({
+        name: 'Counter',
+        mixins: [logMixin],
+        propTypes: {
+          count: React.PropTypes.number.isRequired
+        },
+        render: function() {
+          return React.DOM.span(null, this.props.count);
+        }
+      });
       // テキストエリア 文字数表示用コンポーネント
-      // すべてのライフサイクルメソッドを実装し、引数の内容とともにログに記録する
+      // ログ用の処理をlogMixinオブジェクトに持たせ、mixinsプロパティに指定する。
+
       var TextAreaCounter = React.createClass({
+        name: 'TextAreaCounter',
+        mixins: [logMixin],
         propTypes: {
           text: React.PropTypes.string
         },
@@ -42,46 +75,27 @@
           });
         },
         render: function() {
+          var counter = null;
+          // 文字が入力されているときだけ、文字数カウントコンポーネントを描画させるようにする
+          if (this.state.text.length > 0) {
+            counter = React.DOM.h3(null,
+              React.createElement(Counter, {
+                count: this.state.text.length
+              })
+            );
+          }
+
+
           return React.DOM.div(null,
             React.DOM.textarea({
               value: this.state.text,
               onChange: this._textChange
             }),
-            React.DOM.h3(null, this.state.text.length)
+            counter
           );
-        },
-        _log: function(methodName, args) {
-          console.log(methodName, args)
-        },
-        componentWillUpdate: function() {
-          // update直前
-          this._log('componentWillUpdate', arguments);
-        },
-        componentDidUpdate: function(oldProps, oldState) {
-          // update直後
-
-          // 文字数チェック
-          // 一定数以上を超えている場合は元の状態に戻す
-          if (this.state.text.length > 3) {
-            console.log("replace to old state because of text length over 3")
-            this.replaceState(oldState);
-          }
-          this._log('componentDidUpdate', arguments);
-        },
-        componentWillMount: function() {
-          this._log('componentWillMount', arguments);
-        },
-        componentDidMount: function() {
-          this._log('componentDidMount', arguments);
         }
       });
 
-      var myTextAreaCounter = ReactDOM.render(
-        React.createElement(TextAreaCounter, {
-          defaultValue: 'ボブ'
-        }),
-        document.getElementById("app")
-      );
       // アプリケーションコード
       // createElementで作成したComponentオブジェクトを渡す
       ReactDOM.render(
@@ -91,13 +105,6 @@
         document.getElementById("app")
       );
 
-      // // nameが設定されていないのでブラウザコンソール上でエラーが出る
-      // ReactDOM.render(
-      //   React.createElement(TextAreaCounter, {
-      //     text: 'joe'
-      //   }),
-      //   document.getElementById("app2")
-      // );
     </script>
   </body>
 </html>

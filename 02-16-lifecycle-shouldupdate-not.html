@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ここに描画-->
+    </div>
+    <div id="app2">
+      <!-- ここに描画-->
+    </div>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script>
+      var logMixin = {
+        _log: function(methodName, args) {
+          console.log(this.name + '::' + methodName, args);
+        },
+        componentWillUpdate: function() {
+          // update直前
+          this._log('componentWillUpdate', arguments);
+        },
+        componentDidUpdate: function(oldProps, oldState) {
+          // update直後
+          this._log('componentDidUpdate', arguments);
+        },
+        componentWillMount: function() {
+          this._log('componentWillMount', arguments);
+        },
+        componentDidMount: function() {
+          this._log('componentDidMount', arguments);
+        }
+      };
+
+      var Counter = React.createClass({
+        name: 'Counter',
+        // mixins: [logMixin],
+        propTypes: {
+          count: React.PropTypes.number.isRequired
+        },
+        render: function() {
+          console.log(this.name + '::render()');
+          return React.DOM.span(null, this.props.count);
+        },
+        shouldComponentUpdate(nextProps, nextState_ignore) {
+          // falseを返した時、更新されない
+          return nextProps.count !== this.props.count;
+        }
+      });
+      // テキストエリア 文字数表示用コンポーネント
+      // ログ用の処理をlogMixinオブジェクトに持たせ、mixinsプロパティに指定する。
+
+      var TextAreaCounter = React.createClass({
+        name: 'TextAreaCounter',
+        // mixins: [logMixin],
+        propTypes: {
+          text: React.PropTypes.string
+        },
+        getDefaultProps: function() {
+          return {
+            text: ''
+          };
+        },
+
+        getInitialState: function() {
+          return {
+            text: this.props.defaultValue
+          }
+        },
+        _textChange: function(ev) {
+          this.setState({
+            text: ev.target.value
+          })
+        },
+        componentWillReceiveProps: function(newProps) {
+          this.setState({
+            text: newProps.defaultValue
+          });
+        },
+        render: function() {
+          console.log(this.name + '::render()');
+          var counter = null;
+          // 文字が入力されているときだけ、文字数カウントコンポーネントを描画させるようにする
+          if (this.state.text.length > 0) {
+            counter = React.DOM.h3(null,
+              React.createElement(Counter, {
+                count: this.state.text.length
+              })
+            );
+          }
+
+
+          return React.DOM.div(null,
+            React.DOM.textarea({
+              value: this.state.text,
+              onChange: this._textChange
+            }),
+            counter
+          );
+        }
+      });
+
+      // アプリケーションコード
+      // createElementで作成したComponentオブジェクトを渡す
+      ReactDOM.render(
+        React.createElement(TextAreaCounter, {
+          defaultValue: 'bob'
+        }),
+        document.getElementById("app")
+      );
+
+    </script>
+  </body>
+</html>

@@ -14,9 +14,31 @@
     <script src="react/build/react.js"></script>
     <script src="react/build/react-dom.js"></script>
     <script>
+      var logMixin = {
+        _log: function(methodName, args) {
+          console.log(this.name + '::' + methodName, args);
+        },
+        componentWillUpdate: function() {
+          // update直前
+          this._log('componentWillUpdate', arguments);
+        },
+        componentDidUpdate: function(oldProps, oldState) {
+          // update直後
+          this._log('componentDidUpdate', arguments);
+        },
+        componentWillMount: function() {
+          this._log('componentWillMount', arguments);
+        },
+        componentDidMount: function() {
+          this._log('componentDidMount', arguments);
+        }
+      }
       // テキストエリア 文字数表示用コンポーネント
-      // すべてのライフサイクルメソッドを実装し、引数の内容とともにログに記録する
+      // ログ用の処理をlogMixinオブジェクトに持たせ、mixinsプロパティに指定する。
+      
       var TextAreaCounter = React.createClass({
+        name: 'TextAreaCounter',
+        mixins: [logMixin],
         propTypes: {
           text: React.PropTypes.string
         },
@@ -49,30 +71,6 @@
             }),
             React.DOM.h3(null, this.state.text.length)
           );
-        },
-        _log: function(methodName, args) {
-          console.log(methodName, args)
-        },
-        componentWillUpdate: function() {
-          // update直前
-          this._log('componentWillUpdate', arguments);
-        },
-        componentDidUpdate: function(oldProps, oldState) {
-          // update直後
-
-          // 文字数チェック
-          // 一定数以上を超えている場合は元の状態に戻す
-          if (this.state.text.length > 3) {
-            console.log("replace to old state because of text length over 3")
-            this.replaceState(oldState);
-          }
-          this._log('componentDidUpdate', arguments);
-        },
-        componentWillMount: function() {
-          this._log('componentWillMount', arguments);
-        },
-        componentDidMount: function() {
-          this._log('componentDidMount', arguments);
         }
       });
 
