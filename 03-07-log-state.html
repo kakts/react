@@ -32,10 +32,8 @@
         ["She: A History of Adventure", "H. Rider Haggard", "English", "1887", "100 million"],
       ];
 
-      // テーブルデータの検索機能を追加する
-      // 検索機能オンオフを切り替えれるようにする
-      // オンの場合 条件入力行を追加する
-      // 検索条件を入力すると state.dataに対してフィルタリングを行い、条件に合致した行だけ表示
+      // コンポーネントのステートを保存し、あとでこれらを最初から再現できるようにする
+      // 1秒おきに再生できるようにする
       var Excel = React.createClass({
         displayName: 'Excel', // displayNameをつけることで、デバッグなどが用意になる
         propTypes: {
@@ -48,6 +46,7 @@
             )
           )
         },
+        _log: [],
         getInitialState: function() {
           return {
             data: this.props.initialData, // render時に this.state.dataとして呼び出せる
@@ -57,10 +56,20 @@
             search: false // 検索機能オンフラグ
           };
         },
+        _logSetState: function(newState) {
+          // 新しいステートを保存する
+          // setStateに渡す
+
+          // stateのクローンを作成して記録する
+          this._log.push(JSON.parse(JSON.stringify(
+            this._log.length === 0 ? this.state : newState
+          )));
+          this.setState(newState);
+        },
         _sort: function(e) {
           // テーブルソート用メソッド
           // データをコピーする 直接データをいじってはいけない。
-          // コピーして、データを変更した後に、setStateで変更をかける。
+          // コピーして、データを変更した後に、_logSetStateで変更をかける。
           var column = e.target.cellIndex;
           // 並べ替え対象の列と同じかつ、昇順でない場合
           var descending = this.state.sortby === column && !this.state.descending;
@@ -72,14 +81,14 @@
           });
 
           // dataに加えて、ソート対象の列と、昇順or降順のフラグをsetする
-          this.setState({
+          this._logSetState({
             data: data,
             sortby: column,
             descending: descending
           });
         },
         _showEditor: function(e) {
-          this.setState({
+          this._logSetState({
             edit: {
               row: parseInt(e.target.dataset.row, 10),
               cell: e.target.cellIndex // 列番号 e.targetはダブルクリックされた<td>要素
@@ -97,12 +106,12 @@
           // 入力フィールドの値を使って、対象のセルの値を更新する
           data[this.state.edit.row][this.state.edit.cell] = input.value;
 
-          // setStateにより、renderが毎回呼び出されるが、実際に再描画されるのは、変更のあったセル1つ分のみ
+          // _logSetStateにより、renderが毎回呼び出されるが、実際に再描画されるのは、変更のあったセル1つ分のみ
           // 内部的には描画結果のDOMを表す軽量なデータ構造が生成される。 コレを仮想DOMという。
           // renderメソッドが呼び出されると、変更前後の仮想DOMの差分が算出される。
           // この差分に基づいて、最低限の操作(appendChild textContextの変更など)が実際のブラウザ上のDOM
           // に対して行われる。
-          this.setState({
+          this._logSetState({
             edit: null, // 編集を終了させるのでnullに初期化
             data: data // 変更後の値をdataにセットする
           });
@@ -166,7 +175,7 @@
           console.error('---toggle')
           if (this.state.search) {
                       console.error('---toggle off')
-            this.setState({
+            this._logSetState({
               data: this._preSearchData,
               search: false
             });
@@ -174,7 +183,7 @@
           } else {
                       console.error('---toggleon')
             this._preSearchData = this.state.data;
-            this.setState({
+            this._logSetState({
               search: true
             });
           }
@@ -196,7 +205,7 @@
           var needle = e.target.value.toLowerCase();
           if (!needle) {
             // 検索文字列が削除されたとき
-            this.setState({
+            this._logSetState({
               data: this._preSearchData
             });
             return;
@@ -208,7 +217,7 @@
             // 一致する場合は 0以上になる。
             return row[idx].toString().toLowerCase().indexOf(needle) > -1;
           });
-          this.setState({
+          this._logSetState({
             data: searchdata
           });
         },
@@ -245,7 +254,32 @@
             )
           );
         },
-        _preSearchData: null
+        _preSearchData: null,
+        componentDidMount: function() {
+          document.onkeydown = function(e) {
+            // Shift+R
+            if (e.shiftKey && e.keyCode === 82) {
+              this._replay();
+            }
+          }.bind(this);
+        },
+        _replay: function() {
+          if (this._log.length === 0) {
+            console.warn('ステートが記録されていません。');
+            return;
+          }
+          var idx = -1;
+          var interval = setInterval(function() {
+            idx++;
+            if (idx === this._log.length - 1) {
+              // ログの末尾に達した時
+              clearInterval(interval);
+            }
+            // 動作ログをステートにセットする
+            this.setState(this._log[idx]);
+
+          }.bind(this), 1000);
+        }
       });
 
       ReactDOM.render(
