@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello React</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app">
+      <!-- ここに描画-->
+    </div>
+    <div id="app2">
+      <!-- ここに描画-->
+    </div>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script src="babel/browser.js"></script>
+    <script type="text/babel">
+      // babel/broser.jsの読み込みにより、type=text/babelのscriptタグの中身がトランスパイルされる
+      // アプリケーションコード
+      // React.DOM.h1の第1引数は コンポーネントに渡したいプロパティ
+      ReactDOM.render(
+        <h1 id="my-heading">
+          <span><em>Hell</em>o</span> world!
+        </h1>,
+        document.getElementById('app')
+      )
+    </script>
+  </body>
+</html>
