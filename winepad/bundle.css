@@ -71,6 +71,9 @@ td {
   vertical-align: middle;
   width: 100px;
 }
+.RatingOn {
+  background-color: yellow;
+}
 html {
   background: white;
   font: 16px Arial;
