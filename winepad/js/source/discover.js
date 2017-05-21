@@ -1,5 +1,6 @@
 'use strict';
 
+import Suggest from './components/Suggest';
 import Button from './components/Button';
 import Logo from './components/Logo';
 import React from 'react';
@@ -20,6 +21,9 @@ ReactDOM.render(
     </div>
     <div>クラス名が指定されたButton: <Button className="custom">何もしません</Button>
     </div>
+
+    <h2>Suggest</h2>
+    <div><Suggest options={['eenie', 'meenie', 'miney', 'mo']} /></div>
           {/* その他のコンポーネントはここに追加される */}
   </div>,
   document.getElementById('pad')
