@@ -4,6 +4,7 @@ import Rating from './components/rating';
 import Suggest from './components/Suggest';
 import Button from './components/Button';
 import Logo from './components/Logo';
+import FormInput from './components/FormInput';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -31,6 +32,37 @@ ReactDOM.render(
     <div>初期値4:<Rating defaultValue={4} /></div>
     <div>最大値11:<Rating max={11} /></div>
     <div>読み取り専用:<Rating readonly={true} defaultValue={3} /></div>
+
+    <h2>FormInput</h2>
+    <table><tbody>
+      <tr>
+        <td>単純な入力フィールド</td>
+        <td><FormInput /></td>
+      </tr>
+      <tr>
+        <td>デフォルト値</td>
+        <td><FormInput defaultValue="デフォルトです" /></td>
+      </tr>
+      <tr>
+        <td>年の入力</td>
+        <td><FormInput type="year"/></td>
+      </tr>
+      <tr>
+        <td>評価</td>
+        <td><FormInput type="rating" defaultValue={4} /></td>
+      </tr>
+      <tr>
+        <td>入力候補の定時</td>
+        <td><FormInput
+          type="suggest"
+          options={['red', 'green', 'blue']}
+          defaultValue="green"/></td>
+      </tr>
+      <tr>
+        <td>単純なテキストエリア</td>
+        <td><FormInput type="text"/></td>
+      </tr>
+    </tbody></table>
           {/* その他のコンポーネントはここに追加される */}
   </div>,
   document.getElementById('pad')
