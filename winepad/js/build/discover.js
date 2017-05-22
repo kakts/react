@@ -20,6 +20,10 @@ var _FormInput = require('./components/FormInput');
 
 var _FormInput2 = _interopRequireDefault(_FormInput);
 
+var _Form = require('./components/Form');
+
+var _Form2 = _interopRequireDefault(_Form);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -223,5 +227,8 @@ _reactDom2.default.render(_react2.default.createElement(
         )
       )
     )
-  )
+  ),
+  _react2.default.createElement(_Form2.default, {
+    fields: [{ label: '評価', type: 'string', id: 'rateme' }, { label: 'あいさつ', id: 'freetext' }],
+    initialData: { rateme: 4, freetext: 'こんにちは' } })
 ), document.getElementById('pad'));
