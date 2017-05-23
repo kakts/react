@@ -1,11 +1,13 @@
 'use strict';
 
+import Actions from './components/Actions';
 import Rating from './components/rating';
 import Suggest from './components/Suggest';
 import Button from './components/Button';
 import Logo from './components/Logo';
 import FormInput from './components/FormInput';
 import Form from './components/Form';
+import Dialog from './components/Dialog';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -70,6 +72,21 @@ ReactDOM.render(
         {label: 'あいさつ', id: 'freetext'}
       ]}
       initialData={ {rateme:4, freetext: 'こんにちは'}} />
+    <h2>操作</h2>
+    <div><Actions onAction={type => alert(type)} /></div>
+    <Dialog
+      header="単純な例"
+      onAction={type => alert(type)}>
+      こんにちは！
+    </Dialog>
+    <Dialog
+      header="キャンセルなしぼたん カスタムボタン"
+      hasCancel={false}
+      confirmLabel="ラベル"
+      onAction={type => alert(type)}>
+      何でも表示できます
+      <Button>ボタン</Button>
+    </Dialog>
           {/* その他のコンポーネントはここに追加される */}
   </div>,
   document.getElementById('pad')
