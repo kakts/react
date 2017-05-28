@@ -1,0 +1,10 @@
+{
+  "name": "winepad",
+  "version": "2.0.0",
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ]
+  }
+}
