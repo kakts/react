@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Logo from './components/Logo';
-import Excel from './components/Excel';
+import NewExcel from './components/NewExcel';
 
 var headers = localStorage.getItem('headers');
 var data = localStorage.getItem('data');
@@ -17,7 +17,7 @@ ReactDOM.render(
     <h1>
       <Logo /> winepadにようこそ！
     </h1>
-    <Excel headers={headers} initialData={data} />
+    <NewExcel headers={headers} initialData={data} />
   </div>,
   document.getElementById('pad')
 );

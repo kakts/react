@@ -6,7 +6,7 @@ import Rating from './Rating';
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classNames';
 
-class Excel extends Component {
+class NewExcel extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -122,11 +122,11 @@ class Excel extends Component {
     }
 
     switch(this.satte.dialog.type) {
-      case: 'delete':
+      case 'delete':
         return this._renderDeleteDialog();
-      case: 'info':
+      case 'info':
         return this._renderFormDialog(trur);
-      case: 'edit':
+      case 'edit':
         return this._renderFromDialog();
       default:
         throw Error(`不正なダイアログ: ${this.state.dialog.type}`);
@@ -137,7 +137,7 @@ class Excel extends Component {
     const first = this.state.data[this.state.dialog.idx];
     const nameguess = first[Object.keys(first)[0]];
     return (
-      <dialog
+      <Dialog
         modal={true}
         header="削除確認"
         confirmLabel="削除"
@@ -232,7 +232,7 @@ class Excel extends Component {
                     })}
                     key={idx}
                     data-row={rowidx}
-                    data-key={schema.id}
+                    data-key={schema.id}>
                     {content}
                   </td>
                 );

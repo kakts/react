@@ -1,7 +1,7 @@
 'use strict';
 
 import Actions from './components/Actions';
-import Rating from './components/rating';
+import Rating from './components/Rating';
 import Suggest from './components/Suggest';
 import Button from './components/Button';
 import Logo from './components/Logo';

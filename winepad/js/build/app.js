@@ -12,9 +12,9 @@ var _Logo = require('./components/Logo');
 
 var _Logo2 = _interopRequireDefault(_Logo);
 
-var _Excel = require('./components/Excel');
+var _NewExcel = require('./components/NewExcel');
 
-var _Excel2 = _interopRequireDefault(_Excel);
+var _NewExcel2 = _interopRequireDefault(_NewExcel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34,5 +34,5 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_Logo2.default, null),
     ' winepad\u306B\u3088\u3046\u3053\u305D\uFF01'
   ),
-  _react2.default.createElement(_Excel2.default, { headers: headers, initialData: data })
+  _react2.default.createElement(_NewExcel2.default, { headers: headers, initialData: data })
 ), document.getElementById('pad'));

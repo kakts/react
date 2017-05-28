@@ -11,7 +11,7 @@ export default [
   {
     id: 'year',
     label: '名前',
-    type: 'year'
+    type: 'year',
     show: true,
     sample: 2015
   },
@@ -30,7 +30,7 @@ export default [
     type: 'rating',
     show: true,
     sample: 3
-  }
+  },
   {
     id: 'name',
     label: '名前',
